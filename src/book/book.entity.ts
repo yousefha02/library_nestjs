@@ -2,6 +2,7 @@ import { Column, Table,Model, HasMany, ForeignKey, BelongsTo } from "sequelize-t
 import { BookTranslation } from "./bookTranslation.entity";
 import { Category } from "src/category/category.entity";
 import { Rate } from "./rate.entity";
+import { Quote } from "src/quote/quote.entity";
 
 @Table
 export class Book extends Model{
@@ -32,4 +33,7 @@ export class Book extends Model{
 
     @HasMany(()=>Rate)
     rates:Rate[]
+
+    @HasMany(()=>Quote)
+    quotes:Quote[]
 }
