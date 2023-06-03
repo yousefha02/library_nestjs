@@ -1,4 +1,5 @@
-import { Column, Table,Model } from "sequelize-typescript";
+import { Column, Table,Model, HasMany } from "sequelize-typescript";
+import { Subscribe } from "./subscribe.entity";
 
 @Table
 export class User extends Model{
@@ -22,4 +23,7 @@ export class User extends Model{
     
     @Column({defaultValue:false})
     isVerify:boolean
+
+    @HasMany(()=>Subscribe)
+    subscribs: Subscribe[]
 }
