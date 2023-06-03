@@ -1,6 +1,8 @@
-import { Column, Table,Model, HasMany } from "sequelize-typescript";
+import { Column, Table,Model, HasMany, BelongsToMany } from "sequelize-typescript";
 import { Subscribe } from "./subscribe.entity";
 import { Rate } from "src/book/rate.entity";
+import { Forum } from "src/forum/forum.entity";
+import { UserForum } from "src/forum/userForum.entity";
 
 @Table
 export class User extends Model{
@@ -30,4 +32,7 @@ export class User extends Model{
 
     @HasMany(()=>Rate)
     rates: Rate[]
+
+    @BelongsToMany(()=>Forum,()=>UserForum)
+    forums:Forum[]
 }

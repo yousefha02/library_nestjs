@@ -6,6 +6,7 @@ import { Rate } from 'src/book/rate.entity';
 import { Category } from 'src/category/category.entity';
 import { CategoryTranslation } from 'src/category/categoryTranslation.entity';
 import { Forum } from 'src/forum/forum.entity';
+import { UserForum } from 'src/forum/userForum.entity';
 import { Subscribe } from 'src/user/subscribe.entity';
 import { User } from 'src/user/user.entity';
 
@@ -21,7 +22,7 @@ export const databaseProviders = [
             password: '2838293yo',
             database: 'library_db',
         });
-        sequelize.addModels([Admin,Category,CategoryTranslation,Book,BookTranslation,User,Subscribe,Rate,Forum]);
+        sequelize.addModels([Admin,Category,CategoryTranslation,Book,BookTranslation,User,Subscribe,Rate,Forum,UserForum]);
         await sequelize.sync();
         return sequelize;
         },
