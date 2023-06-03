@@ -1,5 +1,6 @@
 import { Column, Table,Model, HasMany } from "sequelize-typescript";
 import { Subscribe } from "./subscribe.entity";
+import { Rate } from "src/book/rate.entity";
 
 @Table
 export class User extends Model{
@@ -26,4 +27,7 @@ export class User extends Model{
 
     @HasMany(()=>Subscribe)
     subscribs: Subscribe[]
+
+    @HasMany(()=>Rate)
+    rates: Rate[]
 }
