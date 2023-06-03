@@ -4,6 +4,7 @@ import { Book } from 'src/book/book.entity';
 import { BookTranslation } from 'src/book/bookTranslation.entity';
 import { Category } from 'src/category/category.entity';
 import { CategoryTranslation } from 'src/category/categoryTranslation.entity';
+import { User } from 'src/user/user.entity';
 
 export const databaseProviders = [
     {
@@ -17,7 +18,7 @@ export const databaseProviders = [
             password: '2838293yo',
             database: 'library_db',
         });
-        sequelize.addModels([Admin,Category,CategoryTranslation,Book,BookTranslation]);
+        sequelize.addModels([Admin,Category,CategoryTranslation,Book,BookTranslation,User]);
         await sequelize.sync();
         return sequelize;
         },
