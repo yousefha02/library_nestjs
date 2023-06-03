@@ -3,5 +3,5 @@ import { CategoryService } from "./category.service";
 
 @Controller("category")
 export class CategoryController{
-    constructor(private bookService:CategoryService){}
+    constructor(private categoryService:CategoryService){}
 }
