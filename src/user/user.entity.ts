@@ -4,6 +4,7 @@ import { Rate } from "src/book/rate.entity";
 import { Forum } from "src/forum/forum.entity";
 import { UserForum } from "src/forum/userForum.entity";
 import { ForumPost } from "src/forum/forumPost.entity";
+import { PostLike } from "src/forum/postLike.entity";
 
 @Table
 export class User extends Model{
@@ -39,4 +40,7 @@ export class User extends Model{
 
     @HasMany(()=>ForumPost)
     posts:ForumPost[]
+
+    @HasMany(()=>PostLike)
+    likes:PostLike[]
 }

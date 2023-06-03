@@ -1,15 +1,11 @@
 import { Column, Table,Model, BelongsTo, ForeignKey } from "sequelize-typescript";
 import { User } from "src/user/user.entity";
-import { Forum } from "./forum.entity";
-import { DataTypes } from "sequelize";
+import { ForumPost } from "./forumPost.entity";
 
 @Table
-export class ForumPost extends Model{
+export class PostLike extends Model{
     @Column({allowNull:false,autoIncrement:true,primaryKey: true})
     id:number
-
-    @Column({type:DataTypes.TEXT})
-    conent:string
 
     @ForeignKey(()=>User)
     @Column
@@ -18,10 +14,10 @@ export class ForumPost extends Model{
     @BelongsTo(()=>User)
     user:User
 
-    @ForeignKey(()=>Forum)
+    @ForeignKey(()=>ForumPost)
     @Column
-    forumId:number
+    postId:number
 
-    @BelongsTo(()=>Forum)
-    forum:Forum
+    @BelongsTo(()=>ForumPost)
+    forumPost:ForumPost
 }
