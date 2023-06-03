@@ -1,5 +1,6 @@
 import { Column, Table,Model, HasMany } from "sequelize-typescript";
 import { CategoryTranslation } from "./categoryTranslation.entity";
+import { Book } from "src/book/book.entity";
 
 @Table
 export class Category extends Model{
@@ -8,4 +9,7 @@ export class Category extends Model{
 
     @HasMany(()=>CategoryTranslation)
     categoryTranslations:CategoryTranslation[]
+
+    @HasMany(()=>Book)
+    books:Book[]
 }

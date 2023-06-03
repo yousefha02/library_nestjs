@@ -1,5 +1,6 @@
-import { Column, Table,Model, HasMany } from "sequelize-typescript";
+import { Column, Table,Model, HasMany, ForeignKey } from "sequelize-typescript";
 import { BookTranslation } from "./bookTranslation.entity";
+import { Category } from "src/category/category.entity";
 
 @Table
 export class Book extends Model{
@@ -20,4 +21,8 @@ export class Book extends Model{
 
     @HasMany(()=>BookTranslation)
     bookTranslations:BookTranslation[]
+
+    @ForeignKey(()=>Category)
+    @Column
+    categoryId:number
 }
