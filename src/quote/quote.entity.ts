@@ -3,6 +3,7 @@ import { Column, Table,Model, ForeignKey, BelongsTo, HasMany } from "sequelize-t
 import { Book } from "src/book/book.entity";
 import { User } from "src/user/user.entity";
 import { QuoteLike } from "./quoteLike.entity";
+import { QuoteComment } from "./quoteComment.entity";
 
 @Table
 export class Quote extends Model{
@@ -28,4 +29,7 @@ export class Quote extends Model{
 
     @HasMany(()=>QuoteLike)
     likes:QuoteLike[]
+
+    @HasMany(()=>QuoteComment)
+    comments:QuoteComment[]
 }
