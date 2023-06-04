@@ -5,8 +5,9 @@ import { BookModule } from './book/book.module';
 import { UserModule } from './user/user.module';
 import { ForumModule } from './forum/forum.module';
 import { QuoteModule } from './quote/quote.module';
+import {JwtModule} from '@nestjs/jwt'
 
 @Module({
-  imports: [AdminModule,CategoryModule,BookModule,UserModule,ForumModule,QuoteModule],
+  imports: [AdminModule,CategoryModule,BookModule,UserModule,ForumModule,QuoteModule,JwtModule.register({global:true,secret:'token'})],
 })
 export class AppModule {}
