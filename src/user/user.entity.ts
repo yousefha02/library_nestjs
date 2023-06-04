@@ -6,6 +6,7 @@ import { UserForum } from "src/forum/userForum.entity";
 import { ForumPost } from "src/forum/forumPost.entity";
 import { PostLike } from "src/forum/postLike.entity";
 import { Quote } from "src/quote/quote.entity";
+import { QuoteLike } from "src/quote/quoteLike.entity";
 
 @Table
 export class User extends Model{
@@ -47,4 +48,7 @@ export class User extends Model{
 
     @HasMany(()=>Quote)
     quotes:Quote[]
+
+    @HasMany(()=>QuoteLike)
+    quoteslikes:QuoteLike[]
 }

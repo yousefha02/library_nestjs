@@ -1,7 +1,8 @@
 import { DataTypes } from "sequelize";
-import { Column, Table,Model, ForeignKey, BelongsTo } from "sequelize-typescript";
+import { Column, Table,Model, ForeignKey, BelongsTo, HasMany } from "sequelize-typescript";
 import { Book } from "src/book/book.entity";
 import { User } from "src/user/user.entity";
+import { QuoteLike } from "./quoteLike.entity";
 
 @Table
 export class Quote extends Model{
@@ -24,4 +25,7 @@ export class Quote extends Model{
 
     @BelongsTo(()=>User)
     user:User
+
+    @HasMany(()=>QuoteLike)
+    likes:QuoteLike[]
 }
