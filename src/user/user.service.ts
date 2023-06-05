@@ -51,7 +51,6 @@ export class UserService {
         {
             throw new ForbiddenException('code is wrong')
         }
-        await user.update({isVerify:true})
         return "code is right"
     }
 }
