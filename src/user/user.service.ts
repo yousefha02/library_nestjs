@@ -1,8 +1,9 @@
 import {ForbiddenException, Inject, Injectable} from '@nestjs/common'
 import { User } from './user.entity';
-import { EmailRegister, VerfiyCode } from './dto';
+import { EmailRegister, SignPassword, VerfiyCode } from './dto';
 import { generateCode } from 'src/common/utils/generateCode';
 import { sendEmail } from 'src/common/utils/sendEmail';
+import * as bcryptjs from 'bcryptjs'
 
 @Injectable({})
 export class UserService {
@@ -44,7 +45,7 @@ export class UserService {
         const existUser = await this.userRepository.findOne({where:{email:email,isVerify:true}})
         if(existUser)
         {
-            throw new ForbiddenException('email is found')
+            throw new ForbiddenException('email is verified')
         }
         const user = await this.userRepository.findOne({where:{email:email,isVerify:false,verficationCode:code}})
         if(!user)
@@ -52,5 +53,23 @@ export class UserService {
             throw new ForbiddenException('code is wrong')
         }
         return "code is right"
+    }
+
+    async signPassword(dto:SignPassword)
+    {
+        const {email,password} = dto
+        const existUser = await this.userRepository.findOne({where:{email:email,isVerify:true}})
+        if(existUser)
+        {
+            throw new ForbiddenException('email is verified')
+        }
+        const user = await this.userRepository.findOne({where:{email:email,isVerify:false}})
+        if(!user)
+        {
+            throw new ForbiddenException('email is not exist')
+        }
+        const hashPassword = await bcryptjs.hash(password,12)
+        await user.update({isVerify:true,password:hashPassword})
+        return "account has been created"
     }
 }
