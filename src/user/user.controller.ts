@@ -1,6 +1,6 @@
 import { Controller, Post , Body } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { EmailRegister } from "./dto";
+import { EmailRegister, VerfiyCode } from "./dto";
 
 @Controller("user")
 export class UserController{
@@ -10,5 +10,11 @@ export class UserController{
     registerEmail(@Body() dto:EmailRegister)
     {
         return this.userService.registerEmail(dto)
+    }
+
+    @Post('verify-code')
+    verrifyCode(@Body() dto:VerfiyCode)
+    {
+        return this.userService.verifyCode(dto)
     }
 }

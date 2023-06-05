@@ -1,6 +1,6 @@
 import {ForbiddenException, Inject, Injectable} from '@nestjs/common'
 import { User } from './user.entity';
-import { EmailRegister } from './dto';
+import { EmailRegister, VerfiyCode } from './dto';
 import { generateCode } from 'src/common/utils/generateCode';
 import { sendEmail } from 'src/common/utils/sendEmail';
 
@@ -36,5 +36,22 @@ export class UserService {
         };
         sendEmail(mailOptions)
         return {message:"email has created"}
+    }
+
+    async verifyCode(dto:VerfiyCode)
+    {
+        const {email,code} = dto
+        const existUser = await this.userRepository.findOne({where:{email:email,isVerify:true}})
+        if(existUser)
+        {
+            throw new ForbiddenException('email is found')
+        }
+        const user = await this.userRepository.findOne({where:{email:email,isVerify:false,verficationCode:code}})
+        if(!user)
+        {
+            throw new ForbiddenException('code is wrong')
+        }
+        await user.update({isVerify:true})
+        return "code is right"
     }
 }
