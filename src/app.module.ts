@@ -7,9 +7,8 @@ import { ForumModule } from './forum/forum.module';
 import { QuoteModule } from './quote/quote.module';
 import {JwtModule} from '@nestjs/jwt'
 import { MulterModule } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import { CustomStorage } from './custome.storage';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -20,5 +19,6 @@ import { CustomStorage } from './custome.storage';
     }),
     AdminModule,CategoryModule,BookModule,UserModule,ForumModule,QuoteModule,
     JwtModule.register({global:true,secret:'token'}),],
+    controllers:[AppController]
 })
 export class AppModule {}
