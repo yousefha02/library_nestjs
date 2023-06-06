@@ -100,7 +100,7 @@ export class UserService {
         {
             throw new ForbiddenException("can not do action")
         }
-        const user = await this.userRepository.findByPk(userId)
+        const user = await this.userRepository.findOne({where:{id:userId,isVerify:true}})
         if(!user)
         {
             throw new NotFoundException('user is not found')
