@@ -6,8 +6,19 @@ import { UserModule } from './user/user.module';
 import { ForumModule } from './forum/forum.module';
 import { QuoteModule } from './quote/quote.module';
 import {JwtModule} from '@nestjs/jwt'
+import { MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { CustomStorage } from './custome.storage';
 
 @Module({
-  imports: [AdminModule,CategoryModule,BookModule,UserModule,ForumModule,QuoteModule,JwtModule.register({global:true,secret:'token'})],
+  imports: [
+    MulterModule.registerAsync({
+      useFactory: () => ({
+        storage: CustomStorage.storage,
+      }),
+    }),
+    AdminModule,CategoryModule,BookModule,UserModule,ForumModule,QuoteModule,
+    JwtModule.register({global:true,secret:'token'}),],
 })
 export class AppModule {}

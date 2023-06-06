@@ -22,3 +22,13 @@ export class SignPassword {
     @IsEmail()
     email:string
 }
+
+export class UpdateProfle {
+    @IsNotEmpty()
+    userId:string;
+
+    @IsNotEmpty()
+    @MinLength(3)
+    @MaxLength(15)
+    name:string;
+}

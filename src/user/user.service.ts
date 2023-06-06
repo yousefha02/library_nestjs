@@ -1,6 +1,6 @@
 import {ForbiddenException, Inject, Injectable, NotFoundException} from '@nestjs/common'
 import { User } from './user.entity';
-import { EmailRegister, SignPassword, VerfiyCode } from './dto';
+import { EmailRegister, SignPassword, UpdateProfle, VerfiyCode } from './dto';
 import { generateCode } from 'src/common/utils/generateCode';
 import { sendEmail } from 'src/common/utils/sendEmail';
 import * as bcryptjs from 'bcryptjs'
@@ -91,5 +91,10 @@ export class UserService {
         const token = await this.jwtService.signAsync({userId:foundUser.id,role:"user"})
         const {password , ...others} = foundUser.toJSON()  
         return {user:others,token}
+    }
+
+    async updateProfile(dto:UpdateProfle,file:Express.Multer.File)
+    {
+        return "update"
     }
 }

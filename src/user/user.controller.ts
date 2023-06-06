@@ -1,6 +1,8 @@
-import { Controller, Post , Body } from "@nestjs/common";
+import { Controller, Post , Body, Put, UseInterceptors, UploadedFile } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { EmailRegister, SignPassword, VerfiyCode } from "./dto";
+import { EmailRegister, SignPassword, UpdateProfle, VerfiyCode } from "./dto";
+import {FileInterceptor} from '@nestjs/platform-express/multer'
+import { CustomStorage } from "src/custome.storage";
 
 @Controller("user")
 export class UserController{
@@ -28,5 +30,12 @@ export class UserController{
     login(@Body() dto:SignPassword)
     {
         return this.userService.login(dto)
+    }
+
+    @Put('update-profile')
+    @UseInterceptors(FileInterceptor('file',{storage:CustomStorage.storage}))
+    updateProfile(@Body() dto:UpdateProfle,@UploadedFile() file: Express.Multer.File)
+    {
+        return this.userService.updateProfile(dto,file)
     }
 }
