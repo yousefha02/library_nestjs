@@ -23,4 +23,10 @@ export class UserController{
     {
         return this.userService.signPassword(dto)
     }
+
+    @Post('login')
+    login(@Body() dto:SignPassword)
+    {
+        return this.userService.login(dto)
+    }
 }

@@ -1,15 +1,17 @@
-import {ForbiddenException, Inject, Injectable} from '@nestjs/common'
+import {ForbiddenException, Inject, Injectable, NotFoundException} from '@nestjs/common'
 import { User } from './user.entity';
 import { EmailRegister, SignPassword, VerfiyCode } from './dto';
 import { generateCode } from 'src/common/utils/generateCode';
 import { sendEmail } from 'src/common/utils/sendEmail';
 import * as bcryptjs from 'bcryptjs'
+import {JwtService} from '@nestjs/jwt'
 
 @Injectable({})
 export class UserService {
     constructor(
         @Inject('USER_REPOSITORY')
-        private userRepository : typeof User
+        private userRepository : typeof User,
+        private jwtService: JwtService
     ){}
 
     async registerEmail(dto:EmailRegister)
@@ -71,5 +73,23 @@ export class UserService {
         const hashPassword = await bcryptjs.hash(password,12)
         await user.update({isVerify:true,password:hashPassword})
         return "account has been created"
+    }
+
+    async login(dto:SignPassword)
+    {
+        const {email} = dto
+        const foundUser = await this.userRepository.findOne({where:{email:email}})
+        if(!foundUser)
+        {
+            throw new NotFoundException("email is wrong")
+        }
+        const isMatch = await bcryptjs.compare(dto.password,foundUser.password)
+        if(!isMatch)
+        {
+            throw new NotFoundException("password is wrong")
+        }
+        const token = await this.jwtService.signAsync({userId:foundUser.id,role:"user"})
+        const {password , ...others} = foundUser.toJSON()  
+        return {user:others,token}
     }
 }
