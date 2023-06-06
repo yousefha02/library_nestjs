@@ -93,8 +93,19 @@ export class UserService {
         return {user:others,token}
     }
 
-    async updateProfile(dto:UpdateProfle,file:Express.Multer.File)
+    async updateProfile(dto:UpdateProfle,file:Express.Multer.File,req)
     {
-        return "update"
+        const {name,userId} = dto
+        if(req.user.userId.toString()!==userId.toString())
+        {
+            throw new ForbiddenException("can not do action")
+        }
+        const user = await this.userRepository.findByPk(userId)
+        if(!user)
+        {
+            throw new NotFoundException('user is not found')
+        }
+        await user.update({image:file.filename,name})
+        return {message:"user has been updated",image:user.image,name:user.name}
     }
 }

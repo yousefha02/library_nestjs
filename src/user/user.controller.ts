@@ -1,8 +1,9 @@
-import { Controller, Post , Body, Put, UseInterceptors, UploadedFile } from "@nestjs/common";
+import { Controller, Post , Body, Put, UseInterceptors, UploadedFile, UseGuards,Request } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { EmailRegister, SignPassword, UpdateProfle, VerfiyCode } from "./dto";
 import {FileInterceptor} from '@nestjs/platform-express/multer'
 import { CustomStorage } from "src/custome.storage";
+import { AuthGuard } from "src/stratgey";
 
 @Controller("user")
 export class UserController{
@@ -32,10 +33,11 @@ export class UserController{
         return this.userService.login(dto)
     }
 
+    @UseGuards(AuthGuard)
     @Put('update-profile')
     @UseInterceptors(FileInterceptor('file',{storage:CustomStorage.storage}))
-    updateProfile(@Body() dto:UpdateProfle,@UploadedFile() file: Express.Multer.File)
+    updateProfile(@Body() dto:UpdateProfle,@UploadedFile() file: Express.Multer.File,@Request() req)
     {
-        return this.userService.updateProfile(dto,file)
+        return this.userService.updateProfile(dto,file,req)
     }
 }
