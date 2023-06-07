@@ -5,6 +5,11 @@ import { Category } from './category.entity'
 export class CategoryService {
     constructor(
         @Inject('CATEGORY_REPOSITORY')
-        private categoryRepository : Category
+        private categoryRepository : typeof Category
     ){}
+    async createCategory()
+    {
+        const category = await this.categoryRepository.create()
+        return {category,message:"category has been updated"}
+    }
 }
