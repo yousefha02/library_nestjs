@@ -1,6 +1,6 @@
 import {Inject, Injectable,NotFoundException} from '@nestjs/common'
 import { Category } from './category.entity'
-import { TranslationCategory } from './dto'
+import { TranslationCategory, UpdateCategory } from './dto'
 import { CategoryTranslation } from './categoryTranslation.entity'
 
 @Injectable({})
@@ -39,5 +39,39 @@ export class CategoryService {
             }
             )
         return {cateogires}
+    }
+
+    async updateCategory(dto:UpdateCategory)
+    {
+        const {categoryTranslationId,title} = dto
+        const categoryTranslation = await this.categoryTranslationRepository.findByPk(categoryTranslationId)
+        if(!categoryTranslation)
+        {
+            throw new NotFoundException('category translation has not found')
+        }
+        await categoryTranslation.update({title:title})
+        return {message:"category has been updated"}
+    }
+
+    async deleteCategoryTranslation(id:string)
+    {
+        const category = await this.categoryTranslationRepository.findByPk(id)
+        if(!category)
+        {
+            throw new NotFoundException('category translation has not found')
+        }
+        await category.destroy()
+        return {message:"category translation has been deleted"}
+    }
+
+    async deleteCategory(id:string)
+    {
+        const category = await this.categoryRepository.findByPk(id)
+        if(!category)
+        {
+            throw new NotFoundException('category has not found')
+        }
+        await category.destroy()
+        return {message:"category has been deleted"}
     }
 }

@@ -1,8 +1,8 @@
-import { Controller, Post,Request,UseGuards ,Body,Get,Query} from "@nestjs/common";
+import { Controller, Post,Request,UseGuards ,Body,Get,Query,Put,Delete,Param} from "@nestjs/common";
 import { CategoryService } from "./category.service";
 import { verifyAuth } from "src/common/utils/verifyAuth";
 import { AuthGuard } from "src/stratgey";
-import { TranslationCategory } from "./dto";
+import { UpdateCategory, TranslationCategory } from "./dto";
 
 @Controller("category")
 export class CategoryController{
@@ -27,5 +27,29 @@ export class CategoryController{
     getCategories(@Query('lang') lang:string)
     {
         return this.categoryService.getCategories(lang)
+    }
+
+    @UseGuards(AuthGuard)
+    @Put('update')
+    updateCategory(@Request() req,@Body() dto:UpdateCategory)
+    {
+        verifyAuth(req.user.role,"admin")
+        return this.categoryService.updateCategory(dto)
+    }
+
+    @UseGuards(AuthGuard)
+    @Delete('/language/:id')
+    deleteCategoryTranslation(@Request() req,@Param('id') id: string)
+    {
+        verifyAuth(req.user.role,"admin")
+        return this.categoryService.deleteCategoryTranslation(id)
+    }
+
+    @UseGuards(AuthGuard)
+    @Delete('/:id')
+    deleteCategory(@Request() req,@Param('id') id: string)
+    {
+        verifyAuth(req.user.role,"admin")
+        return this.categoryService.deleteCategory(id)
     }
 }

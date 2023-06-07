@@ -10,3 +10,11 @@ export class TranslationCategory {
     @IsNotEmpty()
     title:string
 }
+
+export class UpdateCategory {
+    @IsNotEmpty()
+    title:string;
+
+    @IsNotEmpty()
+    categoryTranslationId:number
+}
