@@ -33,7 +33,10 @@ export class CategoryService {
     async getCategories(lang="en")
     {
         const cateogires = await this.categoryRepository.findAll(
-            {include:[{model:this.categoryTranslationRepository,where:{lang}}]}
+            {
+                attributes:['id'],
+                include:[{model:this.categoryTranslationRepository,where:{lang},required:false,attributes:['title','id']}]
+            }
             )
         return {cateogires}
     }
