@@ -27,3 +27,31 @@ export class CreateBookLanguage {
     @IsNotEmpty()
     bookId:number;
 }
+
+export class UpdateBook { 
+    @IsNotEmpty()
+    title:string;
+
+    @IsNotEmpty()
+    publishYear:string
+
+    @IsNotEmpty()
+    pages:number;
+
+    @IsNotEmpty()
+    categoryId:number;
+
+    @IsNotEmpty()
+    bookId:number;
+}
+
+export class UpdateBookTranslation {
+    @IsNotEmpty()
+    description:string;
+
+    @IsNotEmpty()
+    authorName:string;
+
+    @IsNotEmpty()
+    bookTranslationId:number;
+}

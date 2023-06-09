@@ -1,6 +1,6 @@
-import { Controller, Post,Body,UseInterceptors,UseGuards ,Request,UploadedFile} from "@nestjs/common";
+import { Controller, Post,Body,UseInterceptors,UseGuards ,Request,UploadedFile, Put} from "@nestjs/common";
 import { BookService } from "./book.service";
-import { CreateBook, CreateBookLanguage } from "./dto";
+import { CreateBook, CreateBookLanguage, UpdateBook, UpdateBookTranslation } from "./dto";
 import { CustomStorage } from "src/custome.storage";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { AuthGuard } from "src/stratgey";
@@ -25,5 +25,22 @@ export class BookController{
     {
         verifyAuth(req.user.role,"admin")
         return this.bookService.addBookLanguage(dto)
+    }
+
+    @UseGuards(AuthGuard)
+    @Put('update')
+    @UseInterceptors(FileInterceptor('file',{storage:CustomStorage.storage}))
+    updateBook(@Body() dto:UpdateBook,@Request() req,@UploadedFile() file: Express.Multer.File)
+    {
+        verifyAuth(req.user.role,"admin")
+        return this.bookService.updateBook(dto,file)
+    }
+
+    @UseGuards(AuthGuard)
+    @Put('update-language')
+    updateBookLanguage(@Body() dto:UpdateBookTranslation,@Request() req)
+    {
+        verifyAuth(req.user.role,"admin")
+        return this.bookService.updateBookLanguage(dto)
     }
 }

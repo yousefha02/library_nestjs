@@ -1,6 +1,6 @@
 import {Inject, Injectable,NotFoundException} from '@nestjs/common'
 import { Book } from './book.entity'
-import { CreateBook, CreateBookLanguage } from './dto'
+import { CreateBook, CreateBookLanguage, UpdateBook, UpdateBookTranslation } from './dto'
 import { Category } from 'src/category/category.entity'
 import { BookTranslation } from './bookTranslation.entity'
 
@@ -36,5 +36,36 @@ export class BookService {
         }
         await this.bookLangRepository.create({...dto})
         return {message:"language has been added"}
+    }
+
+    async updateBook(dto:UpdateBook,file)
+    {
+        const category = await this.categoryRepository.findByPk(dto.categoryId)
+        if(!category)
+        {
+            throw new NotFoundException('category is not found')
+        }
+        const book = await this.bookRepository.findByPk(dto.bookId)
+        if(!book)
+        {
+            throw new NotFoundException('book is not found')
+        }
+        if(file)
+        {
+            await book.update({file:file.filename})
+        }
+        await book.update({...dto})
+        return {message:"book has been updated"}
+    }
+
+    async updateBookLanguage(dto:UpdateBookTranslation)
+    {
+        const book = await this.bookLangRepository.findByPk(dto.bookTranslationId)
+        if(!book)
+        {
+            throw new NotFoundException('book is not found')
+        }
+        await book.update({description:dto.description,authorName:dto.authorName})
+        return {message:"book has been updated"}
     }
 }
