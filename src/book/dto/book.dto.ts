@@ -13,3 +13,17 @@ export class CreateBook {
     @IsNotEmpty()
     categoryId:number;
 }
+
+export class CreateBookLanguage {
+    @IsNotEmpty()
+    description:string;
+
+    @IsNotEmpty()
+    lang:string
+
+    @IsNotEmpty()
+    authorName:string;
+
+    @IsNotEmpty()
+    bookId:number;
+}
