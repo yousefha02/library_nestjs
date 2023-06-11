@@ -111,4 +111,20 @@ export class BookService {
         }
         return {book}
     }
+
+    async getBooksByCategory(id:string,lang='ar')
+    {
+        const category = await this.categoryRepository.findByPk(id)
+        if(!category)
+        {
+            throw new NotFoundException('category is not found')
+        }
+        const books = await this.bookRepository.findAll(
+            {where:{categoryId:id}
+            ,include:[{model:this.bookLangRepository,where:{lang},required:false,attributes:
+                {exclude:['createdAt','updatedAt','bookId']}}]
+            ,attributes:{exclude:['createdAt','updatedAt','categoryId']}
+        })
+        return {books}
+    }
 }
