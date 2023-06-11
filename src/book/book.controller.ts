@@ -1,4 +1,4 @@
-import { Controller, Post,Body,UseInterceptors,UseGuards ,Request,UploadedFile, Put} from "@nestjs/common";
+import { Controller, Post,Body,UseInterceptors,UseGuards ,Request,UploadedFile, Put, Delete,Param} from "@nestjs/common";
 import { BookService } from "./book.service";
 import { CreateBook, CreateBookLanguage, UpdateBook, UpdateBookTranslation } from "./dto";
 import { CustomStorage } from "src/custome.storage";
@@ -42,5 +42,13 @@ export class BookController{
     {
         verifyAuth(req.user.role,"admin")
         return this.bookService.updateBookLanguage(dto)
+    }
+
+    @UseGuards(AuthGuard)
+    @Delete('langauge/:id')
+    deleteLanguageBook(@Request() req,@Param('id') id: string)
+    {
+        verifyAuth(req.user.role,"admin")
+        return this.bookService.deleteLanaguageBook(id)
     }
 }

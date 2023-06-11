@@ -68,4 +68,15 @@ export class BookService {
         await book.update({description:dto.description,authorName:dto.authorName})
         return {message:"book has been updated"}
     }
+
+    async deleteLanaguageBook(id:string)
+    {
+        const book = await this.bookLangRepository.findByPk(id)
+        if(!book)
+        {
+            throw new NotFoundException('book is not found')
+        }
+        await book.destroy()
+        return {message:"book language has deleted"}
+    }
 }
