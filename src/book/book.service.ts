@@ -90,4 +90,13 @@ export class BookService {
         await book.destroy()
         return {message:"book has deleted"}
     }
+
+    async getAllBooks(lang='ar')
+    {
+        const books = await this.bookRepository.findAll(
+            {include:[{model:this.bookLangRepository,where:{lang},required:false,attributes:{exclude:['createdAt','updatedAt','bookId']}}]
+            ,attributes:{exclude:['createdAt','updatedAt','categoryId']}
+        })
+        return {books}
+    }
 }
