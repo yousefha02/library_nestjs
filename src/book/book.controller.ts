@@ -51,4 +51,12 @@ export class BookController{
         verifyAuth(req.user.role,"admin")
         return this.bookService.deleteLanaguageBook(id)
     }
+
+    @UseGuards(AuthGuard)
+    @Delete('/:id')
+    deleteBook(@Request() req,@Param('id') id: string)
+    {
+        verifyAuth(req.user.role,"admin")
+        return this.bookService.deleteBook(id)
+    }
 }

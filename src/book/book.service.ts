@@ -79,4 +79,15 @@ export class BookService {
         await book.destroy()
         return {message:"book language has deleted"}
     }
+
+    async deleteBook(id:string)
+    {
+        const book = await this.bookRepository.findByPk(id)
+        if(!book)
+        {
+            throw new NotFoundException('book is not found')
+        }
+        await book.destroy()
+        return {message:"book has deleted"}
+    }
 }
