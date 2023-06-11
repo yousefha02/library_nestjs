@@ -65,4 +65,10 @@ export class BookController{
     {
         return this.bookService.getAllBooks(lang)
     }
+
+    @Get(':id')
+    getSingleBook(@Param('id') id: string,@Query('lang') lang:string)
+    {
+        return this.bookService.getSingleBook(id,lang)
+    }
 }

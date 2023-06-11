@@ -99,4 +99,16 @@ export class BookService {
         })
         return {books}
     }
+
+    async getSingleBook(id:string,lang='ar')
+    {
+        const book = await this.bookRepository.findOne({where:{id},
+            include:[{model:this.bookLangRepository,where:{lang},required:false,attributes:{exclude:['createdAt','updatedAt','bookId']}}]
+            ,attributes:{exclude:['createdAt','updatedAt','categoryId']}})
+        if(!book)
+        {
+            throw new NotFoundException('book has not found')
+        }
+        return {book}
+    }
 }
