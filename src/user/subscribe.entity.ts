@@ -11,9 +11,6 @@ export class Subscribe extends Model{
 
     @Column
     endDate:Date
-    
-    @Column
-    image:string
 
     @Column({defaultValue:false})
     isActive:boolean

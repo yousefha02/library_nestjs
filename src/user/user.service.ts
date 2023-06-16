@@ -1,17 +1,23 @@
 import {ForbiddenException, Inject, Injectable, NotFoundException} from '@nestjs/common'
 import { User } from './user.entity';
-import { EmailRegister, SignPassword, UpdateProfle, VerfiyCode } from './dto';
+import { EmailRegister, SignPassword, UpdateProfle, UserSubscribe, VerfiyCode } from './dto';
 import { generateCode } from 'src/common/utils/generateCode';
 import { sendEmail } from 'src/common/utils/sendEmail';
 import * as bcryptjs from 'bcryptjs'
 import {JwtService} from '@nestjs/jwt'
+import { Subscribe } from './subscribe.entity';
+import { verifyUser } from 'src/common/utils/verifyUser';
+import * as schedule from 'node-schedule'
 
 @Injectable({})
 export class UserService {
     constructor(
         @Inject('USER_REPOSITORY')
         private userRepository : typeof User,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+
+        @Inject('SUBSCRIBE_REPOSITORY')
+        private subscribeRepository : typeof Subscribe
     ){}
 
     async registerEmail(dto:EmailRegister)
@@ -107,5 +113,29 @@ export class UserService {
         }
         await user.update({image:file.filename,name})
         return {message:"user has been updated",image:user.image,name:user.name}
+    }
+
+    async createUserSubscribe(dto:UserSubscribe,req)
+    {
+        const {userId} = dto
+        const userServerId = req.user.userId;
+        verifyUser(userId,userServerId)
+        const userSubscribe = await this.subscribeRepository.findOne({where:{userId,isActive:true}})
+        if(userSubscribe)
+        {
+            throw new ForbiddenException('you have a subscribe')
+        }
+        const startDate = new Date()
+        const endDate = new Date()
+        new Date(endDate.setDate(endDate.getDate()+30))
+        await this.subscribeRepository.create({userId,startDate,endDate,isActive:true})
+
+        const days = new Date()
+        days.setDate(days.getDate()+30)
+        const foundSubscribe = await this.subscribeRepository.findOne({where:{userId,isActive:true}})
+        schedule.scheduleJob(days,async function(){
+            await foundSubscribe.update({isActive:false})
+        });
+        return {message:"user has been subscribed"}
     }
 }

@@ -32,3 +32,8 @@ export class UpdateProfle {
     @MaxLength(15)
     name:string;
 }
+
+export class UserSubscribe {
+    @IsNotEmpty()
+    userId:string;
+}
