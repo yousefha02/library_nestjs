@@ -1,6 +1,6 @@
 import {ForbiddenException, Inject, Injectable, NotFoundException} from '@nestjs/common'
 import { User } from './user.entity';
-import { EmailRegister, SignPassword, UpdateProfle, UserSubscribe, VerfiyCode } from './dto';
+import { EmailRegister, Rating, SignPassword, UpdateProfle, UserSubscribe, VerfiyCode } from './dto';
 import { generateCode } from 'src/common/utils/generateCode';
 import { sendEmail } from 'src/common/utils/sendEmail';
 import * as bcryptjs from 'bcryptjs'
@@ -8,6 +8,8 @@ import {JwtService} from '@nestjs/jwt'
 import { Subscribe } from './subscribe.entity';
 import { verifyUser } from 'src/common/utils/verifyUser';
 import * as schedule from 'node-schedule'
+import { Book } from 'src/book/book.entity';
+import { Rate } from './rate.entity';
 
 @Injectable({})
 export class UserService {
@@ -17,7 +19,13 @@ export class UserService {
         private jwtService: JwtService,
 
         @Inject('SUBSCRIBE_REPOSITORY')
-        private subscribeRepository : typeof Subscribe
+        private subscribeRepository : typeof Subscribe,
+
+        @Inject('BOOK_REPOSITORY')
+        private bookRepository : typeof Book,
+
+        @Inject('RATE_REPOSITORY')
+        private rateRepository : typeof Rate,
     ){}
 
     async registerEmail(dto:EmailRegister)
@@ -137,5 +145,35 @@ export class UserService {
             await foundSubscribe.update({isActive:false})
         });
         return {message:"user has been subscribed"}
+    }
+
+    async rateBook(dto:Rating,req)
+    {
+        const {userId,bookId,conent,rate} = dto
+        const userServerId = req.user.userId;
+        verifyUser(userId,userServerId)
+        const user = await this.userRepository.findByPk(userId)
+        const book = await this.bookRepository.findByPk(bookId)
+        if(!user||!book)
+        {
+            throw new NotFoundException('book or user is not found')
+        }
+        if(!this.verifyUserSubscribe(userId))
+        {
+            throw new ForbiddenException('you are not allowed to do this action')
+        }
+        const rateFound = await this.rateRepository.findOne({where:{userId,bookId}})
+        if(rateFound)
+        {
+            throw new ForbiddenException('you rated the book before')
+        }
+        await this.rateRepository.create({userId,bookId,conent,rate})
+        return {message:"you have rated the book , thx"}
+    }
+
+    async verifyUserSubscribe(userId:string)
+    {
+        const subscribe = await this.subscribeRepository.findOne({where:{userId,isActive:true}})
+        return subscribe ;
     }
 }

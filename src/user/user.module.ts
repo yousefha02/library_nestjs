@@ -4,9 +4,11 @@ import { UserController } from './user.controller';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { Subscribe } from './subscribe.entity';
+import { BookModule } from 'src/book/book.module';
+import { Rate } from './rate.entity';
 
 @Module({
-    imports:[DatabaseModule],
+    imports:[DatabaseModule,BookModule],
     controllers:[UserController],
     providers:[
         UserService,
@@ -17,6 +19,10 @@ import { Subscribe } from './subscribe.entity';
         {
             provide:'SUBSCRIBE_REPOSITORY',
             useValue:Subscribe
+        },
+        {
+            provide:'RATE_REPOSITORY',
+            useValue:Rate
         }
     ],
     exports:['USER_REPOSITORY']

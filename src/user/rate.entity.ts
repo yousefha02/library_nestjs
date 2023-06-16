@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
-import { Column, Table,Model, HasMany, ForeignKey, BelongsTo } from "sequelize-typescript";
-import { Book } from "./book.entity";
+import { Column, Table,Model, ForeignKey, BelongsTo } from "sequelize-typescript";
+import { Book } from "../book/book.entity";
 import { User } from "src/user/user.entity";
 
 @Table

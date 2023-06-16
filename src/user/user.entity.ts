@@ -1,6 +1,6 @@
 import { Column, Table,Model, HasMany, BelongsToMany } from "sequelize-typescript";
 import { Subscribe } from "./subscribe.entity";
-import { Rate } from "src/book/rate.entity";
+import { Rate } from "src/user/rate.entity";
 import { Forum } from "src/forum/forum.entity";
 import { UserForum } from "src/forum/userForum.entity";
 import { ForumPost } from "src/forum/forumPost.entity";

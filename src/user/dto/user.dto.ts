@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, MaxLength, Min, MinLength ,Max} from "class-validator";
 
 export class EmailRegister {
     @IsEmail()
@@ -36,4 +36,21 @@ export class UpdateProfle {
 export class UserSubscribe {
     @IsNotEmpty()
     userId:string;
+}
+
+export class Rating {
+    @IsNotEmpty()
+    userId:string;
+
+    @IsNotEmpty()
+    bookId:string;
+
+    @IsNotEmpty()
+    @MinLength(5)
+    conent:string;
+
+    @IsNotEmpty()
+    @Min(1)
+    @Max(5)
+    rate:number;
 }

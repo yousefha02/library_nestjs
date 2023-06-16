@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 import  {Admin} from 'src/admin/admin.entity';
 import { Book } from 'src/book/book.entity';
 import { BookTranslation } from 'src/book/bookTranslation.entity';
-import { Rate } from 'src/book/rate.entity';
+import { Rate } from 'src/user/rate.entity';
 import { Category } from 'src/category/category.entity';
 import { CategoryTranslation } from 'src/category/categoryTranslation.entity';
 import { Forum } from 'src/forum/forum.entity';

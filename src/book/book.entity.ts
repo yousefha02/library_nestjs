@@ -1,7 +1,7 @@
 import { Column, Table,Model, HasMany, ForeignKey, BelongsTo } from "sequelize-typescript";
 import { BookTranslation } from "./bookTranslation.entity";
 import { Category } from "src/category/category.entity";
-import { Rate } from "./rate.entity";
+import { Rate } from "../user/rate.entity";
 import { Quote } from "src/quote/quote.entity";
 
 @Table
