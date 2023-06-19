@@ -81,4 +81,12 @@ export class UserController{
         verifyAuth(req.user.role,"user")
         return this.userService.addLike(dto,req)
     }
+
+    @UseGuards(AuthGuard)
+    @Post('quote-dislike')
+    disLike(@Request() req,@Body() dto:AddLikeQuote)
+    {
+        verifyAuth(req.user.role,"user")
+        return this.userService.addDisLike(dto,req)
+    }
 }

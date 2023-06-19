@@ -248,6 +248,35 @@ export class UserService {
         return {message:"you like or remove like it"}
     }
 
+    async addDisLike(dto:AddLikeQuote,req)
+    {
+        const {userId,quoteId} = dto
+        const userServerId = req.user.userId;
+        verifyUser(userId,userServerId)
+        const user = await this.userRepository.findByPk(userId)
+        const quote = await this.quoteRepository.findByPk(quoteId)
+        if(!user||!quote)
+        {
+            throw new NotFoundException('quote or user is not found')
+        }
+        if(!this.verifyUserSubscribe(userServerId))
+        {
+            throw new ForbiddenException('you are not allowed to do this action')
+        }
+        const like = await this.quoteLikeRepository.findOne({where:{userId,quoteId}})
+        if(like)
+        {
+            if(like.type==-1)
+            await like.update({type:0})
+            else
+            await like.update({type:-1})
+        }
+        else{
+            await this.quoteLikeRepository.create({userId,quoteId,type:1})
+        }
+        return {message:"you dislike like or remove like it"}
+    }
+
     async verifyUserSubscribe(userId:string)
     {
         const subscribe = await this.subscribeRepository.findOne({where:{userId,isActive:true}})
