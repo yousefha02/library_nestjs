@@ -67,3 +67,16 @@ export class AddQuote {
     @MaxLength(160)
     comment:string;
 }
+
+export class AddQuoteComment {
+    @IsNotEmpty()
+    userId:string;
+
+    @IsNotEmpty()
+    @MinLength(3)
+    @MaxLength(160)
+    content:string;
+
+    @IsNotEmpty()
+    quoteId:string;
+}
