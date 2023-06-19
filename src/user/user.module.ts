@@ -6,6 +6,7 @@ import { UserService } from './user.service';
 import { Subscribe } from './subscribe.entity';
 import { BookModule } from 'src/book/book.module';
 import { Rate } from './rate.entity';
+import { Quote } from 'src/quote/quote.entity';
 
 @Module({
     imports:[DatabaseModule,BookModule],
@@ -23,6 +24,10 @@ import { Rate } from './rate.entity';
         {
             provide:'RATE_REPOSITORY',
             useValue:Rate
+        },
+        {
+            provide:'QUOTE_REPOSITORY',
+            useValue:Quote
         }
     ],
     exports:['USER_REPOSITORY']

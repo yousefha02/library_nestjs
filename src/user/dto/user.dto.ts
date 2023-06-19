@@ -54,3 +54,16 @@ export class Rating {
     @Max(5)
     rate:number;
 }
+
+export class AddQuote {
+    @IsNotEmpty()
+    userId:string;
+
+    @IsNotEmpty()
+    bookId:string;
+
+    @IsNotEmpty()
+    @MinLength(3)
+    @MaxLength(160)
+    comment:string;
+}

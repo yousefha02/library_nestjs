@@ -1,6 +1,6 @@
 import {ForbiddenException, Inject, Injectable, NotFoundException} from '@nestjs/common'
 import { User } from './user.entity';
-import { EmailRegister, Rating, SignPassword, UpdateProfle, UserSubscribe, VerfiyCode } from './dto';
+import { AddQuote, EmailRegister, Rating, SignPassword, UpdateProfle, UserSubscribe, VerfiyCode } from './dto';
 import { generateCode } from 'src/common/utils/generateCode';
 import { sendEmail } from 'src/common/utils/sendEmail';
 import * as bcryptjs from 'bcryptjs'
@@ -10,6 +10,7 @@ import { verifyUser } from 'src/common/utils/verifyUser';
 import * as schedule from 'node-schedule'
 import { Book } from 'src/book/book.entity';
 import { Rate } from './rate.entity';
+import { Quote } from 'src/quote/quote.entity';
 
 @Injectable({})
 export class UserService {
@@ -26,6 +27,9 @@ export class UserService {
 
         @Inject('RATE_REPOSITORY')
         private rateRepository : typeof Rate,
+
+        @Inject('QUOTE_REPOSITORY')
+        private quoteRepository : typeof Quote,
     ){}
 
     async registerEmail(dto:EmailRegister)
@@ -167,6 +171,25 @@ export class UserService {
         }
         await this.rateRepository.create({userId,bookId,conent,rate})
         return {message:"you have rated the book , thx"}
+    }
+
+    async AddQuote(dto:AddQuote,req)
+    {
+        const {userId,bookId,comment} = dto
+        const userServerId = req.user.userId;
+        verifyUser(userId,userServerId)
+        const user = await this.userRepository.findByPk(userId)
+        const book = await this.bookRepository.findByPk(bookId)
+        if(!user||!book)
+        {
+            throw new NotFoundException('book or user is not found')
+        }
+        if(!this.verifyUserSubscribe(userId))
+        {
+            throw new ForbiddenException('you are not allowed to do this action')
+        }
+        const quote = await this.quoteRepository.create({userId,bookId,comment})
+        return {quote}
     }
 
     async verifyUserSubscribe(userId:string)

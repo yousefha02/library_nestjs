@@ -8,7 +8,7 @@ export class QuoteLike extends Model{
     @Column({allowNull:false,autoIncrement:true,primaryKey: true})
     id:number
 
-    @Column({type:DataTypes.TEXT})
+    @Column({type:DataTypes.TEXT,defaultValue:0})
     type:number
 
     @ForeignKey(()=>User)
