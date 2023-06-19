@@ -1,6 +1,6 @@
 import {ForbiddenException, Inject, Injectable, NotFoundException} from '@nestjs/common'
 import { User } from './user.entity';
-import { AddQuote, AddQuoteComment, EmailRegister, Rating, SignPassword, UpdateProfle, UserSubscribe, VerfiyCode } from './dto';
+import { AddLikeQuote, AddQuote, AddQuoteComment, EmailRegister, Rating, SignPassword, UpdateProfle, UserSubscribe, VerfiyCode } from './dto';
 import { generateCode } from 'src/common/utils/generateCode';
 import { sendEmail } from 'src/common/utils/sendEmail';
 import * as bcryptjs from 'bcryptjs'
@@ -12,6 +12,7 @@ import { Book } from 'src/book/book.entity';
 import { Rate } from './rate.entity';
 import { Quote } from 'src/quote/quote.entity';
 import { QuoteComment } from 'src/quote/quoteComment.entity';
+import { QuoteLike } from 'src/quote/quoteLike.entity';
 
 @Injectable({})
 export class UserService {
@@ -33,7 +34,10 @@ export class UserService {
         private quoteRepository : typeof Quote,
 
         @Inject('QUOTECOMMENT_REPOSITORY')
-        private quoteCommentRepository : typeof QuoteComment
+        private quoteCommentRepository : typeof QuoteComment,
+
+        @Inject('QUOTELIKE_REPOSITORY')
+        private quoteLikeRepository : typeof QuoteLike
     ){}
 
     async registerEmail(dto:EmailRegister)
@@ -213,6 +217,35 @@ export class UserService {
         }
         const quoteComment = await this.quoteCommentRepository.create({content,userId,quoteId})
         return {quoteComment}
+    }
+
+    async addLike(dto:AddLikeQuote,req)
+    {
+        const {userId,quoteId} = dto
+        const userServerId = req.user.userId;
+        verifyUser(userId,userServerId)
+        const user = await this.userRepository.findByPk(userId)
+        const quote = await this.quoteRepository.findByPk(quoteId)
+        if(!user||!quote)
+        {
+            throw new NotFoundException('quote or user is not found')
+        }
+        if(!this.verifyUserSubscribe(userServerId))
+        {
+            throw new ForbiddenException('you are not allowed to do this action')
+        }
+        const like = await this.quoteLikeRepository.findOne({where:{userId,quoteId}})
+        if(like)
+        {
+            if(like.type==1)
+            await like.update({type:0})
+            else
+            await like.update({type:1})
+        }
+        else{
+            await this.quoteLikeRepository.create({userId,quoteId,type:1})
+        }
+        return {message:"you like or remove like it"}
     }
 
     async verifyUserSubscribe(userId:string)

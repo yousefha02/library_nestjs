@@ -8,6 +8,7 @@ import { BookModule } from 'src/book/book.module';
 import { Rate } from './rate.entity';
 import { Quote } from 'src/quote/quote.entity';
 import { QuoteComment } from 'src/quote/quoteComment.entity';
+import { QuoteLike } from 'src/quote/quoteLike.entity';
 
 @Module({
     imports:[DatabaseModule,BookModule],
@@ -33,6 +34,10 @@ import { QuoteComment } from 'src/quote/quoteComment.entity';
         {
             provide:'QUOTECOMMENT_REPOSITORY',
             useValue:QuoteComment
+        },
+        {
+            provide:'QUOTELIKE_REPOSITORY',
+            useValue:QuoteLike
         }
     ],
     exports:['USER_REPOSITORY']

@@ -4,6 +4,7 @@ import { QuoteController } from './quote.controller';
 import { Quote } from './quote.entity';
 import { QuoteService } from './quote.service';
 import { QuoteComment } from './quoteComment.entity';
+import { QuoteLike } from './quoteLike.entity';
 
 @Module({
     imports:[DatabaseModule],
@@ -17,9 +18,13 @@ import { QuoteComment } from './quoteComment.entity';
         {
             provide:'QUOTECOMMENT_REPOSITORY',
             useValue:QuoteComment
+        },
+        {
+            provide:'QUOTELIKE_REPOSITORY',
+            useValue:QuoteLike
         }
     ],
-    exports:['QUOTE_REPOSITORY','QUOTECOMMENT_REPOSITORY']
+    exports:['QUOTE_REPOSITORY','QUOTECOMMENT_REPOSITORY','QUOTELIKE_REPOSITORY']
 })
 
 

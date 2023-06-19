@@ -80,3 +80,11 @@ export class AddQuoteComment {
     @IsNotEmpty()
     quoteId:string;
 }
+
+export class AddLikeQuote {
+    @IsNotEmpty()
+    userId:string;
+
+    @IsNotEmpty()
+    quoteId:string;
+}

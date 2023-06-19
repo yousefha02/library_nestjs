@@ -1,6 +1,6 @@
 import { Controller, Post , Body, Put, UseInterceptors, UploadedFile, UseGuards,Request } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { AddQuote, EmailRegister, AddQuoteComment, Rating, SignPassword, UpdateProfle, UserSubscribe, VerfiyCode } from "./dto";
+import { AddQuote, EmailRegister, AddQuoteComment, Rating, SignPassword, UpdateProfle, UserSubscribe, VerfiyCode, AddLikeQuote } from "./dto";
 import {FileInterceptor} from '@nestjs/platform-express/multer'
 import { CustomStorage } from "src/custome.storage";
 import { AuthGuard } from "src/stratgey";
@@ -72,5 +72,13 @@ export class UserController{
     {
         verifyAuth(req.user.role,"user")
         return this.userService.AddQuoteComment(dto,req)
+    }
+
+    @UseGuards(AuthGuard)
+    @Post('quote-like')
+    addLike(@Request() req,@Body() dto:AddLikeQuote)
+    {
+        verifyAuth(req.user.role,"user")
+        return this.userService.addLike(dto,req)
     }
 }
