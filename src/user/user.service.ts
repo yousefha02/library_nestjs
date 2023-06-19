@@ -138,10 +138,8 @@ export class UserService {
         new Date(endDate.setDate(endDate.getDate()+30))
         await this.subscribeRepository.create({userId,startDate,endDate,isActive:true})
 
-        const days = new Date()
-        days.setDate(days.getDate()+30)
         const foundSubscribe = await this.subscribeRepository.findOne({where:{userId,isActive:true}})
-        schedule.scheduleJob(days,async function(){
+        schedule.scheduleJob(endDate,async function(){
             await foundSubscribe.update({isActive:false})
         });
         return {message:"user has been subscribed"}
